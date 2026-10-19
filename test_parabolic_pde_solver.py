@@ -26,6 +26,7 @@ def test_unit_ensure_returns():
     assert res != None
 
 
+
 def test_unit_throws_if_not_passed_specified_params():
     #Arrange
     thrown = False

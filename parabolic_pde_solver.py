@@ -12,6 +12,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from scipy.sparse import diags, csr_matrix
 from scipy.sparse.linalg import spsolve
 
+
 def diags_m(m, n, dif_ji=[], val=[]):
     """
     This function should return a diagonal matrix of size m x n

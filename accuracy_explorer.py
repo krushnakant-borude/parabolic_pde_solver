@@ -96,6 +96,7 @@ if __name__ == "__main__":
     plt.title('Wave Equation Error Truncation Analysis')
     plt.show()
 
+
     # Explore accuracy with change of mt of the separate methods on the heat equation
     L=100        # length of spatial domain
     T=0.7       # total time to solve for
