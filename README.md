@@ -4,7 +4,13 @@
 [![SciPy](https://img.shields.io/badge/SciPy-Sparse%20Matrices-8CAAE6?logo=scipy&logoColor=white)](https://scipy.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-A Python solver for one-dimensional parabolic partial differential equations, with a focus on the transient heat equation. It supports three finite-difference time-integration schemes, time-dependent Dirichlet boundary conditions, internal heat generation, variable diffusion coefficients, numerical error analysis, and 3D visualisation.
+A study and selected modification of an existing open-source Python finite-difference codebase for one-dimensional parabolic partial differential equations, focused on the transient heat equation. The repository contains code for three time-integration schemes, boundary conditions, internal heat generation, variable diffusion coefficients, numerical error analysis, and 3D visualisation; those codebase features are not a claim that I independently authored each component.
+
+## Attribution and Personal Contribution
+
+The starting point for this repository is the [open-source project by Harry Blakiston Houston](https://github.com/hcbh96/parabolic_pde_solver), released under the MIT License. My contribution has been to work through the existing implementation and modify selected parts while studying the Forward Euler, Backward Euler, and Crank-Nicolson schemes and the existing error-comparison workflow across spatial and time-step refinements.
+
+I did **not** independently develop the complete solver, create the accuracy explorer from scratch, or write the pre-existing automated test suite. Feature descriptions below describe code available in this repository; they should not be read as a claim that every component is my original work. Please consult the upstream repository for the original implementation and history.
 
 ## Overview
 
@@ -26,7 +32,7 @@ where:
 - $q(x,t)$ is an optional internal heat source;
 - boundary values may vary with time.
 
-The implementation uses vectorised operations and SciPy sparse matrices to reduce memory use and improve computational efficiency.
+The available implementation uses vectorised operations and SciPy sparse matrices to reduce memory use and improve computational efficiency.
 
 ## Key Features
 
