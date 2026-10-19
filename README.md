@@ -1,78 +1,125 @@
-# Project Parabolic Pde Solver
-Parabolic PDE solver (the solver) is a solver for parabolic partial differential equa- tions over a 1d space (L) and a given time (T). The solver can be used to plot or analyse the results to the heat equation over time. The solver makes it easy to evaluate solutions with non-homogeneous Dirichlet boundary conditions, internal heat sources and/or non-constant diffusion coefficients.
+Parabolic PDE Solver
+A high-performance Parabolic Partial Differential Equation (PDE) Solver for solving and analysing the 1D Heat Equation over a spatial domain and time interval.
 
-The solver has been vectorised and uses sparse matrices to improve computa- tional efficiency.
-Visualisation functionality has also been included with the solver able to produ- ce 3d surface plots of the temperature of the bar or of an internal heat source as a function of postion (x ∈ [0, L]) and time (t ∈ [0, T]).
+The solver supports multiple finite difference methods and includes advanced features such as internal heat sources, variable diffusion coefficients, non-homogeneous boundary conditions, and 3D visualisation tools.
 
-The solver has been broken down into subroutines and internal function calls, some of which have been made ecternally available. These functions can be used separately to create and solve a range of Euler and Crank Nicholson matrices required by the heat equation i.e functions to create, compute and solve the matrices required by the separate methods used to solve the heat equation including Forward Euler (FE), Backward Euler (BE) and Crank-Nicholson (CN) respectively. Any external facing functions have been fully documented.
+To improve computational performance, the implementation utilises vectorised operations and sparse matrix techniques provided by SciPy.
 
+Features
+Numerical Methods
+The solver implements the following finite difference schemes:
 
-The solver is able to handle non-homogeneous Dirichlet boundary values. The user needed to pass in a function bcf(t) which was then used to calculate the boundary conditions for various values of t ∈ [0, T].
+Forward Euler (FE)
+Backward Euler (BE)
+Crank-Nicolson (CN)
+The codebase has been modularised into reusable subroutines, allowing users to independently construct, analyse, and solve the matrices associated with each numerical method.
 
-The solver is able to handle internal heat sources. An internal heat source could be specified using heat\_source(x,t). This meant that a heat source could change with both respect to position x ∈ [0, L] and time t ∈ [0, T].
+Non-Homogeneous Boundary Conditions
+Time-dependent Dirichlet boundary conditions can be applied through a user-defined function:
 
-Users could specify non-constant diffusion coefficients by specifying f\_kappa(x). This means bars with varying conductivity can be simulated by passing in a function that returns the diffusion coefficient along x ∈ [0, L].
+bcf(t)
+This enables accurate modelling of systems whose boundary temperatures vary over time.
 
-# Project Accuracy Explorer
-Accuracy is an untested function designed to explore the accuracy of the various methods I implemented in the solver. The function was designed to test the accuracy/truncation error (E) of the FE, BE and CN methods. The calculation of E was based on the L2-Norm calculation.
+Internal Heat Sources
+Internal heat generation can be specified using:
 
-The function calculated the approximate error for a variety of step sizes passed in. It then returned the approximated error over x ∈ [0, L] for each step size in an array.
-## Getting Started
+heat_source(x, t)
+This allows heat sources to vary with both:
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+Position, $x \in [0, L]$
+Time, $t \in [0, T]$
+making the solver suitable for a wide range of thermal engineering problems.
 
-### Prerequisites
+Variable Diffusion Coefficients
+Spatially varying thermal conductivity can be modelled using:
 
-python3 [python3](https://www.python.org/downloads/)
+f_kappa(x)
+This feature allows simulation of materials whose diffusion properties change throughout the computational domain.
 
-SciPy  [Scipy](https://pypi.org/project/scipy/)
+Visualisation
+Built-in visualisation tools enable users to analyse simulation results through interactive plots.
 
-pytest [pytest](pip install pytest)
+Available visualisations include:
 
-### Installing
-A step by step series of examples that tell you how to get a development env running
+Temperature variation over position and time
+Internal heat source distribution
+3D surface plots for transient heat transfer analysis
+Accuracy Explorer
+The Accuracy Explorer module evaluates the numerical accuracy of the implemented methods.
 
-Clone git directory
+The module:
 
-```
+Computes truncation errors for FE, BE, and CN methods
+Uses the L2-Norm as the error metric
+Compares solution accuracy across different discretisation step sizes
+Returns approximation errors over the spatial domain
+This functionality helps verify convergence behaviour and compare the performance of different numerical schemes.
+
+Project Structure
+parabolic_pde_solver/
+│
+├── parabolic_pde_solver.py
+├── accuracy_explorer.py
+├── tests/
+├── LICENSE.md
+└── README.md
+Applications
+The solver can be used for:
+
+Heat conduction simulations
+Thermal system analysis
+Engineering and scientific research
+Numerical methods education
+Finite difference method verification
+Transient diffusion process studies
+Getting Started
+Prerequisites
+Install the following dependencies before running the project.
+
+Python 3
+Download from:
+
+https://www.python.org/downloads/
+
+SciPy
+pip install scipy
+PyTest
+pip install pytest
+Installation
+Clone the Repository
 git clone https://github.com/hcbh96/parabolic_pde_solver.git
-```
-
-Navigate to the directory
-
-```
+Navigate to the Project Directory
 cd parabolic_pde_solver
-```
-
-Visualse Solutions to the Heat equation
-
-```
+Usage
+Run the Heat Equation Solver
 python3 parabolic_pde_solver.py
-```
-
-Visualise the Truncation Errors
-
-```
+Run the Accuracy Analysis Tool
 python3 accuracy_explorer.py
-```
+Running Tests
+Execute all unit tests using:
 
-## Running the tests
+pytest
+Numerical Methods Summary
+Method	Type	Stability
+Forward Euler (FE)	Explicit	Conditionally Stable
+Backward Euler (BE)	Implicit	Unconditionally Stable
+Crank-Nicolson (CN)	Semi-Implicit	Unconditionally Stable
+Future Enhancements
+Potential future improvements include:
 
-Tests can be run using the terminal command
+Support for two-dimensional PDEs
+Adaptive mesh refinement
+Additional boundary condition types
+Performance benchmarking tools
+GPU-accelerated computations
+Author
+Krushnakant Borude
 
-```
-py.test
-```
+Mechanical Engineer | Scientific Computing & Numerical Methods
 
+Designed and developed the Parabolic PDE Solver and Accuracy Explorer framework for studying and analysing heat transfer problems using finite difference methods.
 
-## Authors
+License
+This project is licensed under the MIT License.
 
-* **Harry Blakiston Houston** - *Initial work* - [hcbh96](https://github.com/hcbh96)
-
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-
-
+See the LICENSE.md file for details.
