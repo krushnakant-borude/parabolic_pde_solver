@@ -1,125 +1,207 @@
-Parabolic PDE Solver
-A high-performance Parabolic Partial Differential Equation (PDE) Solver for solving and analysing the 1D Heat Equation over a spatial domain and time interval.
+# Parabolic PDE Solver
 
-The solver supports multiple finite difference methods and includes advanced features such as internal heat sources, variable diffusion coefficients, non-homogeneous boundary conditions, and 3D visualisation tools.
+[![Python 3](https://img.shields.io/badge/Python-3.x-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![SciPy](https://img.shields.io/badge/SciPy-Sparse%20Matrices-8CAAE6?logo=scipy&logoColor=white)](https://scipy.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-To improve computational performance, the implementation utilises vectorised operations and sparse matrix techniques provided by SciPy.
+A Python solver for one-dimensional parabolic partial differential equations, with a focus on the transient heat equation. It supports three finite-difference time-integration schemes, time-dependent Dirichlet boundary conditions, internal heat generation, variable diffusion coefficients, numerical error analysis, and 3D visualisation.
 
-Features
-Numerical Methods
-The solver implements the following finite difference schemes:
+## Overview
 
-Forward Euler (FE)
-Backward Euler (BE)
-Crank-Nicolson (CN)
-The codebase has been modularised into reusable subroutines, allowing users to independently construct, analyse, and solve the matrices associated with each numerical method.
+The project solves problems of the form
 
-Non-Homogeneous Boundary Conditions
-Time-dependent Dirichlet boundary conditions can be applied through a user-defined function:
+$$
+\frac{\partial u}{\partial t}
+=
+\frac{\partial}{\partial x}
+\left(\kappa(x)\frac{\partial u}{\partial x}\right)
++q(x,t),
+\qquad 0 \le x \le L,\quad 0 \le t \le T,
+$$
 
-bcf(t)
-This enables accurate modelling of systems whose boundary temperatures vary over time.
+where:
 
-Internal Heat Sources
-Internal heat generation can be specified using:
+- $u(x,t)$ is the solution, such as temperature;
+- $\kappa(x)$ is a constant or spatially varying diffusion coefficient;
+- $q(x,t)$ is an optional internal heat source;
+- boundary values may vary with time.
 
-heat_source(x, t)
-This allows heat sources to vary with both:
+The implementation uses vectorised operations and SciPy sparse matrices to reduce memory use and improve computational efficiency.
 
-Position, $x \in [0, L]$
-Time, $t \in [0, T]$
-making the solver suitable for a wide range of thermal engineering problems.
+## Key Features
 
-Variable Diffusion Coefficients
-Spatially varying thermal conductivity can be modelled using:
+- **Forward Euler (FE):** explicit and computationally inexpensive, subject to a stability restriction.
+- **Backward Euler (BE):** implicit and robust for larger time steps.
+- **Crank-Nicolson (CN):** second-order accurate in time for smooth solutions.
+- **Time-dependent Dirichlet boundaries:** supplied through `bcf(t)`.
+- **Internal heat sources:** supplied through `heat_source(x, t)`.
+- **Variable diffusion coefficients:** supplied through `f_kappa(x)`.
+- **Sparse matrix formulation:** efficient assembly and solution of linear systems.
+- **3D visualisation:** inspect the solution or heat-source distribution over space and time.
+- **Accuracy exploration:** compare FE, BE, and CN errors using an L2-norm-based measure.
 
-f_kappa(x)
-This feature allows simulation of materials whose diffusion properties change throughout the computational domain.
+## Numerical Methods
 
-Visualisation
-Built-in visualisation tools enable users to analyse simulation results through interactive plots.
+| Method | Time discretisation | Typical accuracy | Stability |
+|---|---|---:|---|
+| Forward Euler | Explicit | First order | Conditionally stable |
+| Backward Euler | Implicit | First order | Unconditionally stable for the standard linear diffusion problem |
+| Crank-Nicolson | Implicit, centred | Second order | Unconditionally stable for the standard linear diffusion problem |
 
-Available visualisations include:
+> **Forward Euler stability:** for the constant-coefficient 1D heat equation, choose the grid so that the diffusion number $r=\kappa\Delta t/\Delta x^2$ satisfies the method's stability requirement, commonly $r\leq 1/2$.
 
-Temperature variation over position and time
-Internal heat source distribution
-3D surface plots for transient heat transfer analysis
-Accuracy Explorer
-The Accuracy Explorer module evaluates the numerical accuracy of the implemented methods.
+## Repository Structure
 
-The module:
-
-Computes truncation errors for FE, BE, and CN methods
-Uses the L2-Norm as the error metric
-Compares solution accuracy across different discretisation step sizes
-Returns approximation errors over the spatial domain
-This functionality helps verify convergence behaviour and compare the performance of different numerical schemes.
-
-Project Structure
+```text
 parabolic_pde_solver/
-│
-├── parabolic_pde_solver.py
-├── accuracy_explorer.py
-├── tests/
-├── LICENSE.md
-└── README.md
-Applications
-The solver can be used for:
+├── parabolic_pde_solver.py       # PDE solver and visualisation
+├── accuracy_explorer.py          # Error and convergence exploration
+├── test_parabolic_pde_solver.py  # Automated tests
+├── README.md
+└── LICENSE
+```
 
-Heat conduction simulations
-Thermal system analysis
-Engineering and scientific research
-Numerical methods education
-Finite difference method verification
-Transient diffusion process studies
-Getting Started
-Prerequisites
-Install the following dependencies before running the project.
+## Requirements
 
-Python 3
-Download from:
+- Python 3
+- NumPy
+- SciPy
+- Matplotlib
+- pytest, for running tests
 
-https://www.python.org/downloads/
+Install the required packages:
 
-SciPy
-pip install scipy
-PyTest
-pip install pytest
-Installation
-Clone the Repository
-git clone https://github.com/hcbh96/parabolic_pde_solver.git
-Navigate to the Project Directory
+```bash
+python3 -m pip install numpy scipy matplotlib pytest
+```
+
+## Installation
+
+Clone the repository and enter the project directory:
+
+```bash
+git clone https://github.com/krushnakant-borude/parabolic_pde_solver.git
 cd parabolic_pde_solver
-Usage
-Run the Heat Equation Solver
+```
+
+Optional but recommended: create an isolated virtual environment.
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python3 -m pip install --upgrade pip
+python3 -m pip install numpy scipy matplotlib pytest
+```
+
+On Windows, activate the environment with:
+
+```powershell
+.venv\Scripts\activate
+```
+
+## Usage
+
+Run the PDE solver and display the heat-equation solution:
+
+```bash
 python3 parabolic_pde_solver.py
-Run the Accuracy Analysis Tool
+```
+
+Run the accuracy explorer to inspect truncation-error behaviour:
+
+```bash
 python3 accuracy_explorer.py
-Running Tests
-Execute all unit tests using:
+```
 
-pytest
-Numerical Methods Summary
-Method	Type	Stability
-Forward Euler (FE)	Explicit	Conditionally Stable
-Backward Euler (BE)	Implicit	Unconditionally Stable
-Crank-Nicolson (CN)	Semi-Implicit	Unconditionally Stable
-Future Enhancements
-Potential future improvements include:
+## Defining a Problem
 
-Support for two-dimensional PDEs
-Adaptive mesh refinement
-Additional boundary condition types
-Performance benchmarking tools
-GPU-accelerated computations
-Author
-Krushnakant Borude
+The solver accepts functions that describe the physical model.
 
-Mechanical Engineer | Scientific Computing & Numerical Methods
+### Boundary conditions
 
-Designed and developed the Parabolic PDE Solver and Accuracy Explorer framework for studying and analysing heat transfer problems using finite difference methods.
+Use `bcf(t)` to return the Dirichlet boundary values at time `t`.
 
-License
-This project is licensed under the MIT License.
+```python
+def bcf(t):
+    left_temperature = 100.0
+    right_temperature = 20.0 + 5.0 * t
+    return left_temperature, right_temperature
+```
 
-See the LICENSE.md file for details.
+### Internal heat source
+
+Use `heat_source(x, t)` for a source that varies in space and time.
+
+```python
+import numpy as np
+
+
+def heat_source(x, t):
+    return 10.0 * np.exp(-50.0 * (x - 0.5) ** 2) * np.exp(-t)
+```
+
+### Variable diffusion coefficient
+
+Use `f_kappa(x)` to represent a non-uniform material.
+
+```python
+def f_kappa(x):
+    return 1.0 + 0.5 * x
+```
+
+> Function signatures and return shapes must match the public functions documented in `parabolic_pde_solver.py`.
+
+## Accuracy Explorer
+
+`accuracy_explorer.py` compares the numerical schemes across selected spatial or temporal step sizes. It estimates error with an L2-norm-based metric and can be used to:
+
+- examine convergence as the grid is refined;
+- compare FE, BE, and CN behaviour;
+- identify configurations affected by stability or discretisation error;
+- visualise truncation-error trends.
+
+The accuracy explorer is intended as an analysis utility. Validate its reference solution, norm definition, and refinement strategy before using its results for formal verification.
+
+## Running Tests
+
+Run all tests from the repository root:
+
+```bash
+python3 -m pytest -v
+```
+
+## Applications
+
+- Transient heat conduction in a one-dimensional bar
+- Diffusion with spatially varying material properties
+- Heating problems with distributed, time-dependent sources
+- Comparison of explicit and implicit finite-difference schemes
+- Teaching, verification, and experimentation in numerical PDE methods
+
+## Limitations
+
+- The current implementation is intended for a one-dimensional spatial domain.
+- The documented boundary treatment is Dirichlet-based.
+- Forward Euler requires an appropriately small time step.
+- Accuracy depends on spatial and temporal resolution, coefficient regularity, and the selected method.
+
+## Contributing
+
+Contributions are welcome. To propose an improvement:
+
+1. Fork the repository.
+2. Create a branch: `git checkout -b feature/your-feature`.
+3. Add or update tests for the change.
+4. Run `python3 -m pytest -v`.
+5. Commit the change and open a pull request.
+
+Useful contribution areas include additional boundary-condition types, performance benchmarks, expanded verification cases, and two-dimensional support.
+
+## Maintainer
+
+**Krushnakant Borude**  
+Mechanical Engineer interested in scientific computing, numerical methods, and engineering simulation.
+
+## Licence
+
+This project is distributed under the MIT Licence. See [`LICENSE`](LICENSE) for details.
